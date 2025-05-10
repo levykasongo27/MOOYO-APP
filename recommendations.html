@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriGrow - Recommendations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #8BC34A;
+            --accent: #FFC107;
+            --dark: #333;
+            --light: #f9f9f9;
+            --error: #f44336;
+            --sidebar-width: 250px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+        
+        .sidebar-header h2 {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--primary);
+        }
+        
+        .menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .user-name {
+            font-weight: 500;
+        }
+        
+        .user-type {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .date-display {
+            color: #777;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #3e8e41;
+        }
+        
+        .btn-outline {
+            background: none;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+        
+        .recommendation-card {
+            padding: 15px;
+            border-left: 4px solid var(--primary);
+            background: rgba(76, 175, 80, 0.05);
+            margin-bottom: 15px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .recommendation-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .recommendation-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        
+        .recommendation-title {
+            font-weight: 500;
+            flex: 1;
+        }
+        
+        .recommendation-date {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .recommendation-content {
+            padding-left: 40px;
+            font-size: 14px;
+        }
+        
+        .recommendation-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+        
+        .recommendation-action {
+            margin-left: 10px;
+            font-size: 12px;
+            color: #777;
+            cursor: pointer;
+        }
+        
+        .recommendation-action:hover {
+            color: var(--primary);
+        }
+        
+        .toggle-menu {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 101;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .toggle-menu {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <button class="toggle-menu" id="toggleMenu">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>NutriGrow</h2>
+            <p>Nutrition & Growth Tracker</p>
+        </div>
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="nutrition.html" class="menu-item">
+                <i class="fas fa-utensils"></i>
+                <span>Nutrition Tracking</span>
+            </a>
+            <a href="growth.html" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Growth Tracking</span>
+            </a>
+            <a href="#" class="menu-item active">
+                <i class="fas fa-lightbulb"></i>
+                <span>Recommendations</span>
+            </a>
+            <a href="health.html" class="menu-item">
+                <i class="fas fa-heartbeat"></i>
+                <span>Health Monitoring</span>
+            </a>
+            <a href="profile.html" class="menu-item">
+                <i class="fas fa-user"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="#" class="menu-item" id="logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+    
+    <main class="main-content" id="mainContent">
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">JD</div>
+                <div>
+                    <div class="user-name" id="userName">John Doe</div>
+                    <div class="user-type" id="userType">Child</div>
+                </div>
+            </div>
+            <div class="date-display" id="currentDate">Monday, June 14, 2023</div>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="nutrition">Nutrition</div>
+            <div class="tab" data-tab="growth">Growth</div>
+            <div class="tab" data-tab="health">Health</div>
+        </div>
+        
+        <div id="nutrition" class="tab-content active">
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">Nutrition Recommendations</h3>
+                    <button class="btn-outline">View All</button>
+                </div>
+                
+                <div class="recommendation-card">
+                    <div class="recommendation-header">
+                        <div class="recommendation-icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="recommendation-title">Increase Protein Intake</div>
+                        <div class="recommendation-date">Today</div>
+                    </div>
+                    <div class="recommendation-content">
+                        Based on your recent nutrition tracking, we recommend increasing your protein intake by 10-15g per day to support healthy growth and development. Good sources include lean meats, eggs, dairy, beans, and nuts.
+                    </div>
+                    <div class="recommendation-actions">
+                        <span class="recommendation-action">Mark as Read</span>
+                        <span class="recommendation-action">Dismiss</span>
+                    </div>
+                </div>
+                
+                <div class="recommendation-card">
+                    <div class="recommendation-header">
+                        <div class="recommendation-icon">
+                            <i class="fas fa-carrot"></i>
+                        </div>
+                        <div class="recommendation-title">More Vegetables Needed</div>
+                        <div class="recommendation-date">2 days ago</div>
+                    </div>
+                    <div class="recommendation-content">
+                        Your vegetable intake has been below recommended levels. Try to include at least 2 servings of vegetables with lunch and dinner. Leafy greens like spinach and kale are particularly beneficial.
+                    </div>
+                    <div class="recommendation-actions">
+                        <span class="recommendation-action">Mark as Read</span>
+                        <span class="recommendation-action">Dismiss</span>
+                    </div>
+                </div>
+                
+                <div class="recommendation-card">
+                    <div class="recommendation-header">
+                        <div class="recommendation-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="recommendation-title">Hydration Reminder</div>
+                        <div class="recommendation-date">1 week ago</div>
+                    </div>
+                    <div class="recommendation-content">
+                        Remember to drink at least 6-8 glasses of water daily. Proper hydration is essential for nutrient absorption and overall health.
+                    </div>
+                    <div class="recommendation-actions">
+                        <span class="recommendation-action">Mark as Read</span>
+                        <span class="recommendation-action">Dismiss</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="growth" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">Growth Recommendations</h3>
+                    <button class="btn-outline">View All</button>
+                </div>
+                
+                <div class="recommendation-card">
+                    <div class="recommendation-header">
+                        <div class="recommendation-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="recommendation-title">Growth Milestone</div>
+                        <div class="recommendation-date">Today</div>
+                    </div>
+                    <div class="recommendation-content">
+                        Your growth rate is within the expected range for your age. Continue with your current nutrition and activity plan to maintain healthy development.
+                    </div>
+                    <div class="recommendation-actions">
+                        <span class="recommendation-action">Mark as Read</span>
+                        <span class="recommendation-action">Dismiss</span>
+                    </div>
+                </div>
+                
+                <div class="recommendation-card">
+                    <div class="recommendation-header">
+                        <div class="recommendation-icon">
+                            <i class="fas fa-bone"></i>
+                        </div>
+                        <div class="recommendation-title">Bone Health</div>
+                        <div class="recommendation-date">3 days ago</div>
+                    </div>

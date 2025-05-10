@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>happy healthy - Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #8BC34A;
+            --accent: #FFC107;
+            --dark: #333;
+            --light: #f9f9f9;
+            --error: #f44336;
+            --sidebar-width: 250px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+        
+        .sidebar-header h2 {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--primary);
+        }
+        
+        .menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .user-name {
+            font-weight: 500;
+        }
+        
+        .user-type {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .date-display {
+            color: #777;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+        
+        .stat-icon.primary {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--primary);
+        }
+        
+        .stat-icon.secondary {
+            background: rgba(139, 195, 74, 0.1);
+            color: var(--secondary);
+        }
+        
+        .stat-icon.accent {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--accent);
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #777;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #3e8e41;
+        }
+        
+        .btn-outline {
+            background: none;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+        
+        .nutrition-summary {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .nutrition-item {
+            text-align: center;
+            flex: 1;
+            padding: 10px;
+        }
+        
+        .nutrition-value {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .nutrition-label {
+            font-size: 14px;
+            color: #777;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #eee;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 5px;
+        }
+        
+        .meal-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .meal-card:hover {
+            border-color: var(--primary);
+        }
+        
+        .meal-time {
+            font-weight: 500;
+            margin-right: 15px;
+            min-width: 80px;
+        }
+        
+        .meal-details {
+            flex: 1;
+        }
+        
+        .meal-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .meal-nutrition {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .growth-chart-container {
+            height: 300px;
+            position: relative;
+        }
+        
+        .toggle-menu {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 101;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .toggle-menu {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="loginform.html" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <button class="toggle-menu" id="toggleMenu">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Happy Health</h2>
+            <p>Nutrition and Growth Tracker</p>
+        </div>
+        <div class="sidebar-menu">
+            <a href="#" class="menu-item active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="nutrition.html" class="menu-item">
+                <i class="fas fa-utensils"></i>
+                <span>Nutrition Tracking</span>
+            </a>
+            <a href="growth.html" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Growth Tracking</span>
+            </a>
+            <a href="recommendations.html" class="menu-item">
+                <i class="fas fa-lightbulb"></i>
+                <span>Recommendations</span>
+            </a>
+            <a href="health.html" class="menu-item">
+                <i class="fas fa-heartbeat"></i>
+                <span>Health Monitoring</span>
+            </a>
+            <a href="profile.html" class="menu-item">
+                <i class="fas fa-user"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="#" class="menu-item" id="logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+    
+    <main class="main-content" id="mainContent">
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">JD</div>
+                <div>
+                    <div class="user-name" id="userName">John Doe</div>
+                    <div class="user-type" id="userType">Child</div>
+                </div>
+            </div>
+            <div class="date-display" id="currentDate">Monday, June 14, 2023</div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon primary">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div>
+                    <div class="stat-value" id="calories">1,850</div>
+                    <div class="stat-label">Calories Today</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon secondary">
+                    <i class="fas fa-weight"></i>
+                </div>
+                <div>
+                    <div class="stat-value" id="weight">42.5 <span style="font-size: 14px;">kg</span></div>
+                    <div class="stat-label">Current Weight</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon accent">
+                    <i class="fas fa-ruler-vertical"></i>
+                </div>
+                <div>
+                    <div class="stat-value" id="height">152 <span style="font-size: 14px;">cm</span></div>
+                    <div class="stat-label">Current Height</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon primary">
+                    <i class="fas fa-walking"></i>
+                </div>
+                <div>
+                    <div class="stat-value" id="activity">7,250</div>
+                    <div class="stat-label">Steps Today</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <h3 class="section-title">Today's Nutrition</h3>
+                <button class="btn">Add Meal</button>
+            </div>
+            
+            <div class="nutrition-summary">
+                <div class="nutrition-item">
+                    <div class="nutrition-value" id="protein">65g</div>
+                    <div class="nutrition-label">Protein</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                </div>
+                <div class="nutrition-item">
+                    <div class="nutrition-value" id="carbs">210g</div>
+                    <div class="nutrition-label">Carbs</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%"></div>
+                    </div>
+                </div>
+                <div class="nutrition-item">
+                    <div class="nutrition-value" id="fats">50g</div>
+                    <div class="nutrition-label">Fats</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 55%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="todayMeals">
+                <div class="meal-card">
+                    <div class="meal-time">Breakfast</div>
+                    <div class="meal-details">
+                        <div class="meal-name">Oatmeal with fruits and nuts</div>
+                        <div class="meal-nutrition">450 kcal | 15g protein | 65g carbs | 12g fat</div>
+                    </div>
+                    <i class="fas fa-ellipsis-v" style="color: #777;"></i>
+                </div>
+                <div class="meal-card">
+                    <div class="meal-time">Lunch</div>
+                    <div class="meal-details">
+                        <div class="meal-name">Grilled chicken with rice and vegetables</div>
+                        <div class="meal-nutrition">650 kcal | 35g protein | 75g carbs | 20g fat</div>
+                    </div>
+                    <i class="fas fa-ellipsis-v" style="color: #777;"></i>
+                </div>
+                <div class="meal-card">
+                    <div class="meal-time">Snack</div>
+                    <div class="meal-details">
+                        <div class="meal-name">Yogurt with granola</div>
+                        <div class="meal-nutrition">250 kcal | 10g protein | 30g carbs | 8g fat</div>
+                    </div>
+                    <i class="fas fa-ellipsis-v" style="color: #777;"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <h3 class="section-title">Growth Progress</h3>
+                <button class="btn-outline">View History</button>
+            </div>
+            
+            <div class="growth-chart-container">
+                <canvas id="growthChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <h3 class="section-title">Today's Recommendations</h3>
+                <button class="btn-outline">View All</button>
+            </div>
+            
+            <div class="recommendation">
+                <p><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 10px;"></i> Increase protein intake by 10g to support muscle growth.</p>
+                <p><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 10px;"></i> Drink at least 6 glasses of water today.</p>
+                <p><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 10px;"></i> Include more leafy greens in your meals for essential vitamins.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load user data from localStorage
+            const userProfile = JSON.parse(localStorage.getItem('userProfile')) || {
+                fullName: 'John Doe',
+                gender: 'male',
+                userType: 'child',
+                height: 152,
+                weight: 42.5
+            };
+            
+            // Set user data in UI
+            document.getElementById('userName').textContent = userProfile.fullName;
+            document.getElementById('userType').textContent = userProfile.userType === 'child' ? 'Child' : 
+            userProfile.userType === 'pregnant' ? 'Pregnant' : 'Adolescent';
+            document.getElementById('userAvatar').textContent = userProfile.fullName.split(' ').map(n => n[0]).join('');
+            document.getElementById('height').textContent = userProfile.height;
+            document.getElementById('weight').textContent = userProfile.weight;
+            
+            // Set current date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', options);
+            
+            // Toggle sidebar on mobile
+            document.getElementById('toggleMenu').addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('active');
+            });
+            
+            // Logout
+            document.getElementById('logout').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to logout?')) {
+                    window.location.href = 'index.html';
+                }
+            });
+            
+            // Growth chart
+            const ctx = document.getElementById('growthChart').getContext('2d');
+            const growthChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [
+                        {
+                            label: 'Height (cm)',
+                            data: [145, 147, 148, 150, 151, 152],
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Weight (kg)',
+                            data: [40, 40.5, 41, 41.8, 42.2, 42.5],
+                            borderColor: '#FFC107',
+                            backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+            
+            // Update nutrition values based on meals
+            function updateNutritionSummary() {
+                const meals = [
+                    { protein: 15, carbs: 65, fats: 12 },
+                    { protein: 35, carbs: 75, fats: 20 },
+                    { protein: 10, carbs: 30, fats: 8 }
+                ];
+                
+                const totalProtein = meals.reduce((sum, meal) => sum + meal.protein, 0);
+                const totalCarbs = meals.reduce((sum, meal) => sum + meal.carbs, 0);
+                const totalFats = meals.reduce((sum, meal) => sum + meal.fats, 0);
+                
+                document.getElementById('protein').textContent = totalProtein + 'g';
+                document.getElementById('carbs').textContent = totalCarbs + 'g';
+                document.getElementById('fats').textContent = totalFats + 'g';
+                
+                // Update progress bars (simplified - in real app would compare to goals)
+                document.querySelector('.nutrition-item:nth-child(1) .progress-fill').style.width = 
+                    Math.min(100, (totalProtein / 85) * 100) + '%';
+                document.querySelector('.nutrition-item:nth-child(2) .progress-fill').style.width = 
+                    Math.min(100, (totalCarbs / 320) * 100) + '%';
+                document.querySelector('.nutrition-item:nth-child(3) .progress-fill').style.width = 
+                    Math.min(100, (totalFats / 90) * 100) + '%';
+            }
+            
+            updateNutritionSummary();
+        });
+    </script>
+</body>
+</html>

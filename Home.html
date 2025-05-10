@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Happy Healthy Growth Tracking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #8BC34A;
+            --accent: #FFC107;
+            --dark: #2C3E50;
+            --light: #F8F9FA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+        }
+
+        /* Navigation */
+        .navbar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .login-btn {
+            background: var(--primary);
+            color: white !important;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            transition: transform 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 2rem;
+            background: white;
+            text-align: center;
+        }
+
+        .features h2 {
+            margin-bottom: 2rem;
+            color: var(--dark);
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            border-radius: 10px;
+            background: var(--light);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Login CTA Section */
+        .login-cta {
+            padding: 4rem 2rem;
+            background: var(--light);
+            text-align: center;
+        }
+
+        .login-cta .content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .login-cta h2 {
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="#" class="logo">happy healthy</a>
+            <div class="nav-links">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Health Track for Nutrition, Growth, and Development</h1>
+            <p>Smart nutrition and development tracking for children, pregnant women, and adolescents</p>
+    </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2>Key Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Growth Tracking</h3>
+                <p>Monitor height, weight, and developmental milestones</p>
+            </div>
+            <div class="feature-card">
+                <h3>Nutrition Analysis</h3>
+                <p>Track meals and get personalized recommendations</p>
+            </div>
+            <div class="feature-card">
+                <h3>recommendations</h3>
+                <p>Smart predictions and health recommendations</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login CTA Section -->
+    <section class="login-cta">
+        <div class="content">
+            <h2>Already Have an Account?</h2>
+            <p>Access your personalized dashboard to continue tracking your health journey</p>
+            <div class="cta-buttons" style="margin-top: 2rem;">
+                <a href="login form.html" class="btn btn-primary">Login Now</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Check authentication status
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            if(token) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>

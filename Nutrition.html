@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Tracking | NutriGrow</title>
+    <style>
+        /* Shared styles from index.html */
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2E7D32;
+            --accent-color: #8BC34A;
+            --light-color: #F1F8E9;
+            --dark-color: #1B5E20;
+            --text-color: #333;
+            --white: #FFFFFF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: var(--secondary-color);
+            padding: 0.5rem;
+        }
+        
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav a:hover {
+            background-color: var(--dark-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h2 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .nutrition-form {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--dark-color);
+        }
+        
+        .nutrition-summary {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .summary-card {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: var(--light-color);
+        }
+        
+        .summary-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: var(--white);
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>Happy Health</h1>
+        <p>Nutrition, Growth, and Development Tracker</p>
+    </header>
+    
+    <div class="container">
+        <section class="page-header">
+            <h2>Nutrition Tracking</h2>
+            <p>Log your daily meals and track your nutritional intake</p>
+        </section>
+        
+        <section class="nutrition-form">
+            <h3>Add Food Entry</h3>
+            <form id="foodForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="foodName">Food Name</label>
+                        <input type="text" id="foodName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mealType">Meal Type</label>
+                        <select id="mealType" required>
+                            <option value="">Select meal type</option>
+                            <option value="breakfast">Breakfast</option>
+                            <option value="lunch">Lunch</option>
+                            <option value="dinner">Dinner</option>
+                            <option value="snack">Snack</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quantity">Quantity (grams)</label>
+                        <input type="number" id="quantity" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" rows="3"></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Add Food Entry</button>
+            </form>
+        </section>
+        
+        <section class="nutrition-summary">
+            <h3>Today's Nutrition Summary</h3>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h4>Calories</h4>
+                    <p><span id="calories">0</span> / 2000 kcal</p>
+                    <div class="progress-bar">
+                        <div class="progress" id="caloriesProgress"></div>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <h4>Protein</h4>
+                    <p><span id="protein">0</span> / 50g</p>
+                    <div class="progress-bar">
+                        <div class="progress" id="proteinProgress"></div>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <h4>Carbs</h4>
+                    <p><span id="carbs">0</span> / 300g</p>
+                    <div class="progress-bar">
+                        <div class="progress" id="carbsProgress"></div>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <h4>Fats</h4>
+                    <p><span id="fats">0</span> / 65g</p>
+                    <div class="progress-bar">
+                        <div class="progress" id="fatsProgress"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>&copy; 2023 NutriGrow - Nutrition Growth and Development Tracker</p>
+        <p>By Levy K. Asongo</p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample food database (in a real app, this would come from an API)
+            const foodDatabase = {
+                'apple': { calories: 52, protein: 0.3, carbs: 14, fats: 0.2 },
+                'banana': { calories: 89, protein: 1.1, carbs: 22.8, fats: 0.3 },
+                'chicken breast': { calories: 165, protein: 31, carbs: 0, fats: 3.6 },
+                'rice': { calories: 130, protein: 2.7, carbs: 28, fats: 0.3 },
+                'broccoli': { calories: 34, protein: 2.8, carbs: 6.6, fats: 0.4 }
+            };
+            
+            // Today's nutrition totals
+            let todayNutrition = {
+                calories: 0,
+                protein: 0,
+                carbs: 0,
+                fats: 0
+            };
+            
+            // Form submission
+            const foodForm = document.getElementById('foodForm');
+            foodForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const foodName = document.getElementById('foodName').value.toLowerCase();
+                const quantity = parseInt(document.getElementById('quantity').value);
+                const mealType = document.getElementById('mealType').value;
+                const date = document.getElementById('date').value;
+                const notes = document.getElementById('notes').value;
+                
+                // Find food in database
+                if (foodDatabase[foodName]) {
+                    const food = foodDatabase[foodName];
+                    const multiplier = quantity / 100; // Assuming database is per 100g
+                    
+                    // Update nutrition totals
+                    todayNutrition.calories += Math.round(food.calories * multiplier);
+                    todayNutrition.protein += Math.round(food.protein * multiplier);
+                    todayNutrition.carbs += Math.round(food.carbs * multiplier);
+                    todayNutrition.fats += Math.round(food.fats * multiplier);
+                    
+                    // Update UI
+                    updateNutritionSummary();
+                    
+                    // Reset form
+                    foodForm.reset();
+                    
+                    // Show success message
+                    alert(`${foodName} added successfully!`);
+                } else {
+                    alert('Food not found in database. Please try another food item.');
+                }
+            });
+            
+            // Update nutrition summary display
+            function updateNutritionSummary() {
+                document.getElementById('calories').textContent = todayNutrition.calories;
+                document.getElementById('protein').textContent = todayNutrition.protein;
+                document.getElementById('carbs').textContent = todayNutrition.carbs;
+                document.getElementById('fats').textContent = todayNutrition.fats;
+                
+                // Update progress bars
+                updateProgressBar('caloriesProgress', todayNutrition.calories, 2000);
+                updateProgressBar('proteinProgress', todayNutrition.protein, 50);
+                updateProgressBar('carbsProgress', todayNutrition.carbs, 300);
+                updateProgressBar('fatsProgress', todayNutrition.fats, 65);
+            }
+            
+            // Update a progress bar
+            function updateProgressBar(elementId, current, max) {
+                const percentage = Math.min((current / max) * 100, 100);
+                const progressBar = document.getElementById(elementId);
+                progressBar.style.width = `${percentage}%`;
+                
+                // Change color based on percentage
+                if (percentage > 90) {
+                    progressBar.style.backgroundColor = '#f44336'; // Red
+                } else if (percentage > 70) {
+                    progressBar.style.backgroundColor = '#ff9800'; // Orange
+                } else {
+                    progressBar.style.backgroundColor = '#4CAF50'; // Green
+                }
+            }
+            
+            // Set today's date as default
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+        });
+    </script>
+</body>
+</html>

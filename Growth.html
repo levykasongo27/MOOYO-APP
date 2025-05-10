@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriGrow - Growth Tracking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #8BC34A;
+            --accent: #FFC107;
+            --dark: #333;
+            --light: #f9f9f9;
+            --error: #f44336;
+            --sidebar-width: 250px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+        
+        .sidebar-header h2 {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--primary);
+        }
+        
+        .menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .user-name {
+            font-weight: 500;
+        }
+        
+        .user-type {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .date-display {
+            color: #777;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #3e8e41;
+        }
+        
+        .btn-outline {
+            background: none;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+        
+        .growth-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .metric-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        
+        .metric-title {
+            font-weight: 500;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .metric-change {
+            font-size: 14px;
+            color: #777;
+        }
+        
+        .metric-change.positive {
+            color: var(--primary);
+        }
+        
+        .metric-change.negative {
+            color: var(--error);
+        }
+        
+        .chart-container {
+            height: 300px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .growth-form {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px dashed #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .toggle-menu {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 101;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .growth-history {
+            margin-top: 30px;
+        }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .history-table th, .history-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .history-table th {
+            font-weight: 500;
+            color: #777;
+        }
+        
+        .history-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .toggle-menu {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .history-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <button class="toggle-menu" id="toggleMenu">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Happy healthy</h2>
+            <p>Nutrition amd growth Tracker</p>
+        </div>
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="nutrition.html" class="menu-item">
+                <i class="fas fa-utensils"></i>
+                <span>Nutrition Tracking</span>
+            </a>
+            <a href="#" class="menu-item active">
+                <i class="fas fa-chart-line"></i>
+                <span>Growth Tracking</span>
+            </a>
+            <a href="recommendations.html" class="menu-item">
+                <i class="fas fa-lightbulb"></i>
+                <span>Recommendations</span>
+            </a>
+            <a href="health.html" class="menu-item">
+                <i class="fas fa-heartbeat"></i>
+                <span>Health Monitoring</span>
+            </a>
+            <a href="profile.html" class="menu-item">
+                <i class="fas fa-user"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="#" class="menu-item" id="logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+    
+    <main class="main-content" id="mainContent">
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">JD</div>
+                <div>
+                    <div class="user-name" id="userName">John Doe</div>
+                    <div class="user-type" id="userType">Child</div>
+                </div>
+            </div>
+            <div class="date-display" id="currentDate">Monday, June 14, 2023</div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <h3 class="section-title">Growth Overview</h3>
+                <button class="btn" id="addGrowthBtn">Add Measurement</button>
+            </div>
+            
+            <div class="growth-metrics">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon">
+                            <i class="fas fa-ruler-vertical"></i>
+                        </div>
+                        <div>
+                            <div class="metric-title">Height</div>
+                            <div class="metric-change positive">+2 cm since last month</div>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="currentHeight">152 cm</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon">
+                            <i class="fas fa-weight"></i>
+                        </div>
+                        <div>
+                            <div class="metric-title">Weight</div>
+                            <div class="metric-change positive">+0.5 kg since last month</div>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="currentWeight">42.5 kg</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <div>
+                            <div class="metric-title">BMI</div>
+                            <div class="metric-change">No change since last month</div>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="currentBMI">18.4</div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="growthChart"></canvas>
+            </div>
+            
+            <div class="growth-form" id="growthForm" style="display: none;">
+                <div class="form-group">
+                    <label for="growthDate">Date</label>
+                    <input type="date" id="growthDate" class="form-control" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="newHeight">Height (cm)</label>
+                            <input type="number" id="newHeight" class="form-control" step="0.1">
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="newWeight">Weight (kg)</label>
+                            <input type="number" id="newWeight" class="form-control" step="0.1">
+                        </div>
+                    </div>
+                </div>
+                <div id="pregnancyFields" class="form-group hidden">
+                    <label for="fetalMeasurements">Fetal Measurements</label>
+                    <textarea id="fetalMeasurements" class="form-control" rows="2" placeholder="Enter any fetal measurements"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="growthNotes">Notes</label>
+                    <textarea id="growthNotes" class="form-control" rows="3" placeholder="Any additional notes about this measurement"></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn" id="saveGrowth">Save Measurement</button>
+                    <button type="button" class="btn btn-outline" id="cancelGrowth">Cancel</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <h3 class="section-title">Growth History</h3>
+                <button class="btn-outline">Export Data</button>
+            </div>
+            
+            <div class="growth-history">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Height</th>
+                            <th>Weight</th>
+                            <th>BMI</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="growthHistory">
+                        <tr>
+                            <td>Jun 14, 2023</td>
+                            <td>152 cm</td>
+                            <td>42.5 kg</td>
+                            <td>18.4</td>
+                            <td>Regular checkup</td>
+                        </tr>
+                        <tr>
+                            <td>May 10, 2023</td>
+                            <td>151 cm</td>
+                            <td>42.0 kg</td>
+                            <td>18.4</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Apr 5, 2023</td>
+                            <td>150 cm</td>
+                            <td>41.5 kg</td>
+                            <td>18.4</td>
+                            <td>Growth spurt noticed</td>
+                        </tr>
+                        <tr>
+                            <td>Mar 1, 2023</td>
+                            <td>149 cm</td>
+                            <td>41.0 kg</td>
+                            <td>18.5</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Feb 2, 2023</td>
+                            <td>148 cm</td>
+                            <td>40.8 kg</td>
+                            <td>18.6</td>
+                            <td>Winter checkup</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <h3 class="section-title">Growth Percentiles</h3>
+                <button class="btn-outline">Learn More</button>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="percentileChart"></canvas>
+            </div>
+            
+            <div style="margin-top: 20px; font-size: 14px; color: #777;">
+                <p>Your child's growth is being compared to WHO growth standards for children of the same age and gender.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load user data from localStorage
+            const userProfile = JSON.parse(localStorage.getItem('userProfile')) || {
+                fullName: 'John Doe',
+                gender: 'male',
+                userType: 'child',
+                height: 152,
+                weight: 42.5
+            };
+            
+            // Set user data in UI
+            document.getElementById('userName').textContent = userProfile.fullName;
+            document.getElementById('userType').textContent = userProfile.userType === 'child' ? 'Child' : 
+            userType === 'pregnant' ? 'Pregnant' : 'Adolescent';
+            document.getElementById('userAvatar').textContent = userProfile.fullName.split(' ').map(n => n[0]).join('');
+            document.getElementById('currentHeight').textContent = userProfile.height + ' cm';
+            document.getElementById('currentWeight').textContent = userProfile.weight + ' kg';
+            
+            // Calculate BMI
+            const heightInMeters = userProfile.height / 100;
+            const bmi = (userProfile.weight / (heightInMeters * heightInMeters)).toFixed(1);
+            document.getElementById('currentBMI').textContent = bmi;
+            
+            // Set current date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', options);
+            
+            // Set today's date as default in form
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('growthDate').value = today;
+            
+            // Toggle sidebar on mobile
+            document.getElementById('toggleMenu').addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('active');
+            });
+            
+            // Logout
+            document.getElementById('logout').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to logout?')) {
+                    window.location.href = 'index.html';
+                }
+            });
+            
+            // Toggle growth form
+            document.getElementById('addGrowthBtn').addEventListener('click', function() {
+                document.getElementById('growthForm').style.display = 'block';
+            });
+            
+            document.getElementById('cancelGrowth').addEventListener('click', function() {
+                document.getElementById('growthForm').style.display = 'none';
+            });
+            
+            // Save growth measurement
+            document.getElementById('saveGrowth').addEventListener('click', function() {
+                const date = document.getElementById('growthDate').value;
+                const height = document.getElementById('newHeight').value;
+                const weight = document.getElementById('newWeight').value;
+                const notes = document.getElementById('growthNotes').value;
+                
+                if (!date) {
+                    alert('Please enter a date');
+                    return;
+                }
+                
+                if (!height && !weight) {
+                    alert('Please enter at least height or weight');
+                    return;
+                }
+                
+                // In a real app, you would save this to your database
+                const measurement = {
+                    date,
+                    height,
+                    weight,
+                    notes
+                };
+                
+                console.log('New growth measurement:', measurement);
+                
+                // Update current values if provided
+                if (height) {
+                    document.getElementById('currentHeight').textContent = height + ' cm';
+                    userProfile.height = parseFloat(height);
+                }
+                
+                if (weight) {
+                    document.getElementById('currentWeight').textContent = weight + ' kg';
+                    userProfile.weight = parseFloat(weight);
+                    
+                    // Update BMI
+                    const heightInMeters = userProfile.height / 100;
+                    const newBMI = (userProfile.weight / (heightInMeters * heightInMeters)).toFixed(1);
+                    document.getElementById('currentBMI').textContent = newBMI;
+                }
+                
+                // Add to history table
+                const historyRow = document.createElement('tr');
+                const dateObj = new Date(date);
+                const formattedDate = dateObj.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+                
+                const bmiValue = height && weight ? 
+                    (weight / ((height/100) * (height/100))).toFixed(1) : '-';
+                
+                historyRow.innerHTML = `
+                    <td>${formattedDate}</td>
+                    <td>${height || '-'} ${height ? 'cm' : ''}</td>
+                    <td>${weight || '-'} ${weight ? 'kg' : ''}</td>
+                    <td>${bmiValue}</td>
+                    <td>${notes || ''}</td>
+                `;
+                
+                document.getElementById('growthHistory').prepend(historyRow);
+                
+                // Reset form
+                document.getElementById('newHeight').value = '';
+                document.getElementById('newWeight').value = '';
+                document.getElementById('growthNotes').value = '';
+                document.getElementById('growthForm').style.display = 'none';
+                
+                // Update charts
+                updateGrowthChart();
+                updatePercentileChart();
+                
+                // Update localStorage
+                localStorage.setItem('userProfile', JSON.stringify(userProfile));
+            });
+            
+            // Growth chart
+            const growthCtx = document.getElementById('growthChart').getContext('2d');
+            let growthChart = new Chart(growthCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [
+                        {
+                            label: 'Height (cm)',
+                            data: [148, 149, 150, 151, 151.5, 152],
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            tension: 0.3,
+                            fill: true,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Weight (kg)',
+                            data: [40.8, 41.0, 41.5, 42.0, 42.2, 42.5],
+                            borderColor: '#FFC107',
+                            backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                            tension: 0.3,
+                            fill: true,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Height (cm)'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Weight (kg)'
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                        }
+                    }
+                }
+            });
+            
+            // Percentile chart
+            const percentileCtx = document.getElementById('percentileChart').getContext('2d');
+            let percentileChart = new Chart(percentileCtx, {
+                type: 'line',
+                data: {
+                    labels: ['3rd', '15th', '50th', '85th', '97th'],
+                    datasets: [{
+                        label: 'Height Percentile',
+                        data: [140, 145, 152, 158, 162],
+                        borderColor: '#4CAF50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Height (cm)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Percentile'
+                            }
+                        }
+                    },
+                    plugins: {
+                        annotation: {
+                            annotations: {
+                                line1: {
+                                    type: 'line',
+                                    yMin: 152,
+                                    yMax: 152,
+                                    borderColor: 'rgb(255, 99, 132)',
+                                    borderWidth: 2,
+                                    label: {
+                                        content: 'Your child',
+                                        enabled: true,
+                                        position: 'right'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            function updateGrowthChart() {
+                // In a real app, you would fetch the updated data from your database
+                // For demo purposes, we'll just add random data
+                const labels = growthChart.data.labels;
+                const heightData = growthChart.data.datasets[0].data;
+                const weightData = growthChart.data.datasets[1].data;
+                
+                // Add new month if needed
+                if (labels.length < 12) {
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    labels.push(months[labels.length]);
+                }
+                
+                // Add new data points
+                const lastHeight = heightData[heightData.length - 1];
+                const lastWeight = weightData[weightData.length - 1];
+                
+                heightData.push(lastHeight + (Math.random() * 2 - 0.5));
+                weightData.push(lastWeight + (Math.random() * 1 - 0.2));
+                
+                // Limit to 12 data points
+                if (labels.length > 12) {
+                    labels.shift();
+                    heightData.shift();
+                    weightData.shift();
+                }
+                
+                growthChart.update();
+            }
+            
+            function updatePercentileChart() {
+                // In a real app, you would calculate actual percentiles based on WHO data
+                // For demo purposes, we'll just add some random variation
+                const data = percentileChart.data.datasets[0].data;
+                for (let i = 0; i < data.length; i++) {
+                    data[i] = data[i] + (Math.random() * 2 - 1);
+                }
+                percentileChart.update();
+            }
+        });
+    </script>
+</body>
+</html>

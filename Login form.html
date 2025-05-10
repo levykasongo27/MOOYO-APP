@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriGrow - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #8BC34A;
+            --accent: #FFC107;
+            --dark: #333;
+            --light: #f9f9f9;
+            --error: #f44336;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+        }
+        
+        .auth-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .auth-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .auth-header p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .auth-body {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #3e8e41;
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background: #7cb342;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .error-message {
+            color: var(--error);
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .user-type-selector {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .user-type {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .user-type:hover {
+            border-color: var(--primary);
+        }
+        
+        .user-type.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .user-type i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>NutriGrow</h1>
+                <p>Nutrition and growth tracking for children, pregnant women, and adolescents</p>
+            </div>
+            <div class="auth-body">
+                <div class="tabs">
+                    <div class="tab active" data-tab="login">Login</div>
+                    <div class="tab" data-tab="signup">Sign Up</div>
+                </div>
+                
+                <div id="login" class="tab-content active">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" class="form-control" required>
+                            <div class="error-message" id="loginEmailError">Please enter a valid email</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" class="form-control" required>
+                            <div class="error-message" id="loginPasswordError">Password must be at least 6 characters</div>
+                        </div>
+                        <button type="submit" class="btn">Login</button>
+                    </form>
+                    <div class="auth-footer">
+                        <p>Don't have an account? <a href="#" id="showSignup">Sign up here</a></p>
+                    </div>
+                </div>
+                
+                <div id="signup" class="tab-content">
+                    <form id="signupForm">
+                        <div class="form-group">
+                            <label>I am a:</label>
+                            <div class="user-type-selector">
+                                <div class="user-type selected" data-type="child">
+                                    <i class="fas fa-child"></i>
+                                    <div>Child</div>
+                                </div>
+                                <div class="user-type" data-type="pregnant">
+                                    <i class="fas fa-female"></i>
+                                    <div>Pregnant</div>
+                                </div>
+                                <div class="user-type" data-type="adolescent">
+                                    <i class="fas fa-user-graduate"></i>
+                                    <div>Adolescent</div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="userType" value="child">
+                        </div>
+                        <div class="form-group">
+                            <label for="signupName">Full Name</label>
+                            <input type="text" id="signupName" class="form-control" required>
+                            <div class="error-message" id="signupNameError">Please enter your name</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupEmail">Email</label>
+                            <input type="email" id="signupEmail" class="form-control" required>
+                            <div class="error-message" id="signupEmailError">Please enter a valid email</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword">Password</label>
+                            <input type="password" id="signupPassword" class="form-control" required>
+                            <div class="error-message" id="signupPasswordError">Password must be at least 6 characters</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupConfirmPassword">Confirm Password</label>
+                            <input type="password" id="signupConfirmPassword" class="form-control" required>
+                            <div class="error-message" id="signupConfirmPasswordError">Passwords don't match</div>
+                        </div>
+                        <button type="submit" class="btn">Create Account</button>
+                    </form>
+                    <div class="auth-footer">
+                        <p>Already have an account? <a href="#" id="showLogin">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Update tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update content
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Quick links between login and signup
+            document.getElementById('showSignup').addEventListener('click', function(e) {
+                e.preventDefault();
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                document.querySelector('.tab[data-tab="signup"]').classList.add('active');
+                document.getElementById('signup').classList.add('active');
+            });
+            
+            document.getElementById('showLogin').addEventListener('click', function(e) {
+                e.preventDefault();
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                document.querySelector('.tab[data-tab="login"]').classList.add('active');
+                document.getElementById('login').classList.add('active');
+            });
+            
+            // User type selection
+            const userTypes = document.querySelectorAll('.user-type');
+            const userTypeInput = document.getElementById('userType');
+            
+            userTypes.forEach(type => {
+                type.addEventListener('click', function() {
+                    userTypes.forEach(t => t.classList.remove('selected'));
+                    this.classList.add('selected');
+                    userTypeInput.value = this.getAttribute('data-type');
+                });
+            });
+            
+            // Form validation
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                let isValid = true;
+                
+                const email = document.getElementById('loginEmail');
+                const password = document.getElementById('loginPassword');
+                
+                // Validate email
+                if (!email.value || !email.value.includes('@')) {
+                    document.getElementById('loginEmailError').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('loginEmailError').style.display = 'none';
+                }
+                
+                // Validate password
+                if (!password.value || password.value.length < 6) {
+                    document.getElementById('loginPasswordError').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('loginPasswordError').style.display = 'none';
+                }
+                
+                if (isValid) {
+                    // Simulate login
+                    alert('Login successful! Redirecting to dashboard...');
+                    window.location.href = 'dashboard.html';
+                }
+            });
+            
+            document.getElementById('signupForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                let isValid = true;
+                
+                const name = document.getElementById('signupName');
+                const email = document.getElementById('signupEmail');
+                const password = document.getElementById('signupPassword');
+                const confirmPassword = document.getElementById('signupConfirmPassword');
+                
+                // Validate name
+                if (!name.value) {
+                    document.getElementById('signupNameError').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('signupNameError').style.display = 'none';
+                }
+                
+                // Validate email
+                if (!email.value || !email.value.includes('@')) {
+                    document.getElementById('signupEmailError').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('signupEmailError').style.display = 'none';
+                }
+                
+                // Validate password
+                if (!password.value || password.value.length < 6) {
+                    document.getElementById('signupPasswordError').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('signupPasswordError').style.display = 'none';
+                }
+                
+                // Validate confirm password
+                if (password.value !== confirmPassword.value) {
+                    document.getElementById('signupConfirmPasswordError').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('signupConfirmPasswordError').style.display = 'none';
+                }
+                
+                if (isValid) {
+                    // Simulate signup
+                    alert('Account created successfully! Redirecting to profile setup...');
+                    window.location.href = 'profile.html';
+                }
+                document.getElementById('loginForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const email = document.getElementById('loginEmail').value;
+                    const password = document.getElementById('loginPassword').value;
+                    
+                    fetch('/api/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            password: password
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 200) {
+                            // Store token in localStorage
+                            localStorage.setItem('token', data.data.token);
+                            localStorage.setItem('userProfile', JSON.stringify({
+                                fullName: data.data.full_name,
+                                userType: data.data.user_type
+                            }));
+                            
+                            // Redirect to dashboard
+                            window.location.href = 'dashboard.html';
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Login failed');
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriGrow - Health Monitoring</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #8BC34A;
+            --accent: #FFC107;
+            --dark: #333;
+            --light: #f9f9f9;
+            --error: #f44336;
+            --sidebar-width: 250px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+        
+        .sidebar-header h2 {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--primary);
+        }
+        
+        .menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .user-name {
+            font-weight: 500;
+        }
+        
+        .user-type {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .date-display {
+            color: #777;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #3e8e41;
+        }
+        
+        .btn-outline {
+            background: none;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        
+        .stat-icon.primary {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--primary);
+        }
+        
+        .stat-icon.secondary {
+            background: rgba(139, 195, 74, 0.1);
+            color: var(--secondary);
+        }
+        
+        .stat-icon.accent {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--accent);
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #777;
+        }
+        
+        .health-metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .metric-info {
+            flex: 1;
+        }
+        
+        .metric-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .metric-value {
+            font-size: 14px;
+            color: #777;
+        }
+        
+        .metric-actions {
+            display: flex;
+        }
+        
+        .metric-action {
+            margin-left: 10px;
+            color: #777;
+            cursor: pointer;
+        }
+        
+        .metric-action:hover {
+            color: var(--primary);
+        }
+        
+        .add-metric-form {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px dashed #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .toggle-menu {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 101;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .toggle-menu {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <button class="toggle-menu" id="toggleMenu">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>NutriGrow</h2>
+            <p>Nutrition & Growth Tracker</p>
+        </div>
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="nutrition.html" class="menu-item">
+                <i class="fas fa-utensils"></i>
+                <span>Nutrition Tracking</span>
+            </a>
+            <a href="growth.html" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Growth Tracking</span>
+            </a>
+            <a href="recommendations.html" class="menu-item">
+                <i class="fas fa-lightbulb"></i>
+                <span>Recommendations</span>
+            </a>
+            <a href="#" class="menu-item active">
+                <i class="fas fa-heartbeat"></i>
+                <span>Health Monitoring</span>
+            </a>
+            <a href="profile.html" class="menu-item">
+                <i class="fas fa-user"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="#" class="menu-item" id="logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+    
+    <main class="main-content" id="mainContent">
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">JD</div>
+                <div>
+                    <div class="user-name" id="userName">John Doe</div>
+                    <div class="user-type" id="userType">Child</div>
+                </div>
+            </div>
+            <div class="date-display" id="currentDate">Monday, June 14, 2023</div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <h3 class="section-title">Today's Health Metrics</h3>
+                <button class="btn" id="addMetricBtn">Add Metric</button>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon primary">
+                        <i class="fas fa-walking"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value" id="steps">7,250</div>
+                        <div class="stat-label">Steps</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon secondary">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value" id="sleep">8.2 <span style="font-size: 14px;">hrs</span></div>
+                        <div class="stat-label">Sleep</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon accent">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value" id="heartRate">72 <span style="font-size: 14px;">bpm</span></div>
+                        <div class="stat-label">Heart Rate</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="healthMetrics">
+                <div class="health-metric">
+                    <div class="metric-info">
+                        <div class="metric-name">Morning Walk</div>
+                        <div class="metric-value">Duration: 30 min | Distance: 2.5 km | Calories: 150 kcal</div>
+                    </div>
+                    <div class="metric-actions">
+                        <i class="fas fa-edit metric-action edit-metric"></i>
+                        <i class="fas fa-trash metric-action delete-metric"></i>
+                    </div>
+                </div>
+                <div class="health-metric">
+                    <div class="metric-info">
+                        <div class="metric-name">Sleep Quality</div>
+                        <div class="metric-value">Duration: 8.2 hrs | Deep Sleep: 2.5 hrs | Quality: Good</div>
+                    </div>
+                    <div class="metric-actions">
+                        <i class="fas fa-edit metric-action edit-metric"></i>
+                        <i class="fas fa-trash metric-action delete-metric"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="add-metric-form" id="addMetricForm" style="display: none;">
+                <div class="form-group">
+                    <label for="metricType">Metric Type</label>
+                    <select id="metricType" class="form-control">
+                        <option value="activity">Physical Activity</option>
+                        <option value="sleep">Sleep</option>
+                        <option value="heart_rate">Heart Rate</option>
+                        <option value="blood_pressure">Blood Pressure</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="metricName">Name/Description</label>
+                    <input type="text" id="metricName" class="form-control" placeholder="e.g., Morning Walk">
+                </div>
+                <div id="activityFields">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="activityDuration">Duration (minutes)</label>
+                                <input type="number" id="activityDuration" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="activityCalories">Calories Burned</label>
+                                <input type="number" id="activityCalories" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="sleepFields" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="sleepDuration">Duration (hours)</label>
+                                <input type="number" step="0.1" id="sleepDuration" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="sleepQuality">Quality</label>
+                                <select id="sleepQuality" class="form-control">
+                                    <option value="excellent">Excellent</option>
+                                    <option value="good">Good</option>
+                                    <option value="fair">Fair</option>
+                                    <option value="poor">Poor</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn" id="saveMetric">Save Metric</button>
+                    <button type="button" class="btn btn-outline" id="cancelMetric">Cancel</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <h3 class="section-title">Activity Trends</h3>
+                <button class="btn-outline">View All</button>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="activityChart"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load user data from localStorage
+            const userProfile = JSON.parse(localStorage.getItem('userProfile')) || {
+                fullName: 'John Doe',
+                gender: 'male',
+                userType: 'child'
+            };
+            
+            // Set user data in UI
+            document.getElementById('userName').textContent = userProfile.fullName;
+            document.getElementById('userType').textContent = userProfile.userType === 'child' ? 'Child' : 
+                                                           userProfile.userType === 'pregnant' ? 'Pregnant' : 'Adolescent';
+            document.getElementById('userAvatar').textContent = userProfile.fullName.split(' ').map(n => n[0]).join('');
+            
+            // Set current date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', options);
+            
+            // Toggle sidebar on mobile
+            document.getElementById('toggleMenu').addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('active');
+            });
+            
+            // Logout
+            document.getElementById('logout').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to logout?')) {
+                    window.location.href = 'index.html';
+                }
+            });
+            
+            // Show/hide metric form fields based on type
+            document.getElementById('metricType').addEventListener('change', function() {
+                const type = this.value;
+                document.getElementById('activityFields').style.display = 'none';
+                document.getElementById('sleepFields').style.display = 'none';
+                
+                if (type === 'activity') {
+                    document.getElementById('activityFields').style.display = 'block';
+                } else if (type === 'sleep') {
+                    document.getElementById('sleepFields').style.display = 'block';
+                }
+            });
+            
+            // Toggle add metric form
+            document.getElementById('addMetricBtn').addEventListener('click', function() {
+                document.getElementById('addMetricForm').style.display = 'block';
+            });
+            
+            document.getElementById('cancelMetric').addEventListener('click', function() {
+                document.getElementById('addMetricForm').style.display = 'none';
+            });
+            
+            // Save metric
+            document.getElementById('saveMetric').addEventListener('click', function() {
+                const type = document.getElementById('metricType').value;
+                const name = document.getElementById('metricName').value;
+                
+                if (!name) {
+                    alert('Please enter a name/description for the metric');
+                    return;
+                }
+                
+                let metricValue = '';
+                
+                if (type === 'activity') {
+                    const duration = document.getElementById('activityDuration').value;
+                    const calories = document.getElementById('activityCalories').value;
+                    metricValue = `Duration: ${duration} min | Calories: ${calories} kcal`;
+                } else if (type === 'sleep') {
+                    const duration = document.getElementById('sleepDuration').value;
+                    const quality = document.getElementById('sleepQuality').value;
+                    metricValue = `Duration: ${duration} hrs | Quality: ${quality}`;
+                }
+                
+                // In a real app, you would save this to your database
+                const metric = {
+                    type,
+                    name,
+                    value: metricValue
+                };
+                
+                // Add to UI
+                const metricElement = document.createElement('div');
+                metricElement.className = 'health-metric';
+                metricElement.innerHTML = `
+                    <div class="metric-info">
+                        <div class="metric-name">${name}</div>
+                        <div class="metric-value">${metricValue}</div>
+                    </div>
+                    <div class="metric-actions">
+                        <i class="fas fa-edit metric-action edit-metric"></i>
+                        <i class="fas fa-trash metric-action delete-metric"></i>
+                    </div>
+                `;
+                document.getElementById('healthMetrics').appendChild(metricElement);
+                
+                // Reset form
+                document.getElementById('metricName').value = '';
+                document.getElementById('activityDuration').value = '';
+                document.getElementById('activityCalories').value = '';
+                document.getElementById('sleepDuration').value = '';
+                document.getElementById('sleepQuality').value = 'good';
+                document.getElementById('addMetricForm').style.display = 'none';
+            });
+            
+            // Activity chart
+            const activityCtx = document.getElementById('activityChart').getContext('2d');
+            const activityChart = new Chart(activityCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Steps',
+                        data: [6500, 7200, 8000, 7500, 9000, 5000, 4000],
+                        backgroundColor: 'rgba(76, 175, 80, 0.7)',
+                        borderColor: 'rgba(76, 175, 80, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
